@@ -1,0 +1,18 @@
+#! /bin/bash
+
+#jenkins_url="http://localhost:8080"
+#echo $jenkins_url
+#
+#crumb=$(curl -s --cookie-jar /tmp/cookies -u $1:$2 $jenkins_url/crumbIssuer/api/json  | jq .crumb -r)
+#echo $crumb
+#
+#token=$(curl -s -X POST -H "Jenkins-Crumb:"${crumb}"" --cookie /tmp/cookies  $jenkins_url/me/descriptorByName/jenkins.security.ApiTokenProperty/generateNewToken?newTokenName=\demo-token66 -u $1:$2 | jq .data.tokenValue -r)
+#echo $token
+
+
+while read plugin
+do
+echo "Installing ${plugin}..."
+java -jar jenkins-cli.jar -s http://localhost:8080/ -auth @token install-plugin "${plugin}" < /dev/null
+done < plugins
+java -jar jenkins-cli.jar -s http://localhost:8080/ -auth @token safe-restart
